@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Big Brother Nimigeneraattori</title>
+  <style>
+:root {
+  --oliivi: #8ba;
+  --minttu: #cfe;
+  --vanilja: #fff;
+  --sorbee: #a47;
+  --vattumehu: #fad;
+  --nonparelli: #246;
+  --goo: #444;
+  --lumi: #fefefe;
+  --valkonen: #fff;
+}
+html {
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--oliivi);
+  text-align: center;
+  height: 100%;
+}
+.bbng-content {
+  background-color: var(--lumi);
+  display: inline-block;
+  font-family: sans-serif;
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+  height: 100%;
+
+}
+.bbng-logo {
+  display: inline-block;
+  width: 200px;
+  padding: 20px 0;
+  cursor: pointer;
+}
+.bbng-logo--main {
+  color: var(--sorbee);
+  line-height: 10px;
+  letter-spacing: 2px;
+}
+.bbng-logo--aft {
+  color: var(--nonparelli);
+  text-align: right;
+  font-size: 14px;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+.bbng-page {
+  display: none;
+  border-radius: 20px;
+  width: 94%;
+  margin: 3%;
+  padding: 3%;
+  box-sizing: border-box;
+  background-color: var(--minttu);
+  border: 2px solid var(--oliivi);
+}
+.bbng-p {
+
+}
+.bbng-button {
+  background-color: var(--sorbee);
+  opacity: 1;
+  color: var(--valkonen);
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 2px;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+  -o-font-smoothing: antialiased;
+}
+.bbng-button:hover {
+  background: var(--vattumehu);
+  color: #000;
+}
+.bbng-button:focus {
+  outline: none;
+  background: var(--vattumehu);
+  color: #000;
+}
+.bbng-input {
+  background: var(--vanilja);
+  border-radius: 8px;
+  font-size: 20px;
+  line-height: 20px;
+}
+.bbng-input:focus {
+  outline: none;
+  background: var(--vattumehu);
+  color: #000;
+}
+
+.bbng-bubble {
+  display: inline-block;
+  background: var(--vanilja);
+  width: 200px;
+  height: 200px;
+  line-height: 200px;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: bold;
+  border: 2px solid var(--oliivi);
+  color: var(--sorbee);
+
+}
+
+.bbng-progress {
+  animation: progress 1s ease infinite;
+  color: var(--oliivi);
+  font-weight: normal;
+}
+
+@keyframes progress {
+50% {
+  opacity: 0.2;
+}
+  </style>
+  <script>
+
+function onPage(page) {
+  switch(page) {
+     case 'start':
+       document.getElementById('ok').focus()
+       return;
+     case 'home':
+       document.getElementById('name-input').focus()
+       return;
+     case 'wait':
+       window.setTimeout(() => showPage('tada', 0), 2_345)
+       return;
+     case 'tada':
+       document.getElementById('new').focus()
+       return;
+  }
+}
+
+function showPage(page, delay=300) {
+  Array.from(document.getElementsByClassName('js-page')).forEach(page => page.style="")
+
+  const show = () => {
+      Array.from(document.getElementsByClassName('js-page--'.concat(page))).forEach(page => page.style="display: block")
+      onPage(page)
+    }
+
+  if (delay === 0) {
+    show();
+  } else {
+    window.setTimeout(show, delay)
+  }
+}
+
+function fromBirthName(name) {
+  return 'BB-'.concat(name.slice(0,1).toUpperCase().concat(name.slice(1)))
+}
+
+function displayError() {
+  document.getElementById('name-input').focus()
+  document.getElementById('name-input').style = 'border-color: #f00;'
+}
+function hideError() {
+  document.getElementById('name-input').style = ''
+}
+
+function generateBBName(birthName) {
+  const bbName = fromBirthName(birthName)
+  Array.from(document.getElementsByClassName('js-bb-name')).forEach(out => out.innerText = bbName)
+}
+
+function clearForm() {
+  document.getElementById('name-input').value = ''
+  document.getElementById('surname-input').value = ''
+}
+
+function onGenerateFormSubmit(evt) {
+  evt.preventDefault();
+  hideError();
+  const input = document.getElementById('name-input').value
+  const [word] = input.split(' ');
+  if (word.length < 1) {
+    displayError()
+  } else {
+    generateBBName(word);
+    showPage('wait');
+  }
+}
+
+function onHomeButtonClick() {
+  clearForm()
+  showPage('home')
+}
+
+function bindHandlers() {
+  Array.from(document.getElementsByClassName('js-button--home')).forEach(button => {
+    button.addEventListener('click', onHomeButtonClick)
+  })
+  Array.from(document.getElementsByClassName('js-form--generate')).forEach(button => {
+    button.addEventListener('submit', onGenerateFormSubmit)
+  })
+}
+
+function onDocument() {
+  bindHandlers()
+  showPage('start', 0)
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  onDocument(document)
+})
+  </script>
+</head>
+<body>
+<div class="bbng-content">
+<div class="bbng-logo js-button--home">
+  <h1 class="bbng-logo--main">Big Brother</h1>
+  <p class="bbng-logo--aft">-nimigeneraattori</p>
+</div>
+<div class="bbng-page js-page js-page--start">
+  <p class="bbng-p">
+    Big Brother -nimigeneraattorilla voit generoida itsellesi tai ystävällesi hauskan Big Brother -nimen.
+    Palvelu ei tallenna tietojasi, eikä vaadi kirjautumista ja voit keskeyttää sen käytön milloin hyvänsä.
+  </p>
+  <br />
+  <input id="ok" class="bbng-button js-button--home" type="button" value="Selv&auml; homma" />
+  <br />
+  <br />
+</div>
+<div class="bbng-page js-page js-page--home">
+  <p class="bbng-p">
+    Big Brother -nimi generoidaan henkilölle syntymässä asetetun <em>oikean</em> nimen perusteella.
+  </p>
+  <br />
+  <form class="js-form--generate">
+    <label for="name-input">Etunimi</label>
+  <br />
+    <input class="bbng-input" id="name-input" type="text" value="" /><br />
+  <br />
+    <label for="surname-input">Sukunimi </label>
+  <br />
+    <input class="bbng-input" id="surname-input" type="text" value="" /><br />
+  <br />
+  <br />
+    <input class="bbng-button" type="submit" value="Generoi BB-nimi" />
+  </form>
+  <br />
+</div>
+<div class="bbng-page js-page js-page--wait">
+  <br />
+  <p class="bbng-p">Big Brother-nimesi on...</p>
+  <br />
+  <div class="bbng-bubble"><span class="bbng-progress">generoidaan</span></div>
+  <br />
+  <br />
+  <br />
+</div>
+<div class="bbng-page js-page js-page--tada">
+  <br />
+  <p class="bbng-p">Big Brother-nimesi on...</p>
+  <br />
+  <div class="bbng-bubble"><span class="js-bb-name">foo</span></div>
+  <br />
+  <br />
+  <br />
+  <input id="new" class="bbng-button js-button--home" type="button" value="Aloita alusta" />
+  <br />
+  <br />
+  <br />
+</div>
+</div>
+</body>
+</html>
