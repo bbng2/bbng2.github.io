@@ -1,0 +1,10 @@
+{
+  "name": "Big Brother -nimigeneraattori",
+  "short_name": "BB-nimi",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#8ba",
+  "theme_color": "#077",
+  "description": "BB-nimigeneraattorilla voit generoida itsellesi tai ystävällesi hauskan Big Brother -nimen.",
+  "related_applications": []
+}
